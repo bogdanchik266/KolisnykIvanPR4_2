@@ -1,96 +1,96 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const btnOpenModal = document.querySelector('#btnOpenModal');
-    const modalBlock = document.querySelector('#modalBlock');
-    const closeModal = document.querySelector('#closeModal');
-    const questionTitle = document.querySelector('#question');
-    const formAnswers = document.querySelector('#formAnswers');
-    const nextButton = document.querySelector('#next');
-    const prevButton = document.querySelector('#prev');
+const questions = [
+    {
+        question: "Якого кольору бургер?",
+        answers: [
+            {
+                title: 'Стандарт',
+                url: './image/burger.png'
+            },
+            {
+                title: 'Чорний',
+                url: './image/burgerBlack.png'
+            }
+        ],
+        type: 'radio'
+    },
+    {
+        question: "З якого м'яса котлета?",
+        answers: [
+            {
+                title: 'Курка',
+                url: './image/chickenMeat.png'
+            },
+            {
+                title: 'Яловичина',
+                url: './image/beefMeat.png'
+            },
+            {
+                title: 'Свинина',
+                url: './image/porkMeat.png'
+            }
+        ],
+        type: 'radio'
+    },
+    {
+        question: "Додаткові інгредієнти ?",
+        answers: [
+            {
+                title: 'Помідор',
+                url: './image/tomato.png'
+            },
+            {
+                title: 'Огірок',
+                url: './image/cucumber.png'
+            },
+            {
+                title: 'Салат',
+                url: './image/salad.png'
+            },
+            {
+                title: 'Цибуля',
+                url: './image/onion.png'
+            }
+        ],
+        type: 'checkbox'
+    },
+    {
+        question: "Додати соус?",
+        answers: [
+            {
+                title: 'Часниковий',
+                url: './image/sauce1.png'
+            },
+            {
+                title: 'Томатний',
+                url: './image/sauce2.png'
+            },
+            {
+                title: 'Гірчичний',
+                url: './image/sauce3.png'
+            }
+        ],
+        type: 'radio'
+    }
+];
 
-    const questions = [
-        {
-            question: "Якого кольору бургер?",
-            answers: [
-                { title: 'Стандарт', url: './image/burger.png' },
-                { title: 'Чорний', url: './image/burgerBlack.png' }
-            ],
-            type: 'radio'
-        },
-        {
-            question: "З якого м'яса котлета?",
-            answers: [
-                { title: 'Курка', url: './image/chickenMeat.png' },
-                { title: 'Яловичина', url: './image/beefMeat.png' },
-                { title: 'Свинина', url: './image/porkMeat.png' }
-            ],
-            type: 'radio'
-        },
-        {
-            question: "Додаткові інгредієнти?",
-            answers: [
-                { title: 'Помідор', url: './image/tomato.png' },
-                { title: 'Огірок', url: './image/cucumber.png' },
-                { title: 'Салат', url: './image/salad.png' },
-                { title: 'Цибуля', url: './image/onion.png' }
-            ],
-            type: 'checkbox'
-        },
-        {
-            question: "Додати соус?",
-            answers: [
-                { title: 'Часниковий', url: './image/sauce1.png' },
-                { title: 'Томатний', url: './image/sauce2.png' },
-                { title: 'Гірчичний', url: './image/sauce3.png' }
-            ],
-            type: 'radio'
-        }
-    ];
+const obj = {}
 
-    btnOpenModal.addEventListener('click', () => {
-        modalBlock.classList.add('d-block'); 
-        playTest();
-    });
+const getData = () => {
+    formAnswers.textContent = 'LOAD';
 
-    closeModal.addEventListener('click', () => {
-        modalBlock.classList.remove('d-block');
-    });
+    setTimeout(() => {
+        fetch('http://localhost:81/Quiz__intens/db.json')
+            .then(res => res.json())
+            .then(obj => playTest(obj.questions))
+    }, 2000);
+}
 
-    const playTest = () => {
-        let numberQuestion = 0;
+const obj = {};
 
-        const renderAnswers = (index) => {
-            questions[index].answers.forEach((answer) => {
-                const answerItem = document.createElement('div');
-                answerItem.classList.add('answers-item', 'd-flex', 'flex-column');
-                answerItem.innerHTML = `<input type="${questions[index].type}" id="${answer.title}" name="answer" class="d-none">
-                    <label for="${answer.title}" class="d-flex flex-column justify-content-between">
-                      <img class="answerImg" src="${answer.url}" alt="answer">
-                      <span>${answer.title}</span>
-                    </label>`;
-                formAnswers.appendChild(answerItem);
-            });
-        };
+const inputs = [...formAnswers.elements]
+    .filter(elem => elem.checked)
 
-        const renderQuestions = (indexQuestion) => {
-            formAnswers.innerHTML = '';
-            questionTitle.textContent = questions[indexQuestion].question;
-            renderAnswers(indexQuestion);
-
-            // Приховуємо або показуємо кнопки Prev і Next в залежності від поточного питання
-            prevButton.style.display = indexQuestion === 0 ? 'none' : 'block';
-            nextButton.style.display = indexQuestion === questions.length - 1 ? 'none' : 'block';
-        };
-
-        renderQuestions(numberQuestion);
-
-        nextButton.onclick = () => {
-            numberQuestion++;
-            renderQuestions(numberQuestion);
-        };
-
-        prevButton.onclick = () => {
-            numberQuestion--;
-            renderQuestions(numberQuestion);
-        };
-    };
-});
+inputs.forEach((elem, index) => {
+    obj[`${index}_${questions[numberQuestion].question}`] = elem.value;
+})
+finalAnswers.push(obj)
