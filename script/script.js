@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
             questionTitle.textContent = questions[indexQuestion].question;
             renderAnswers(indexQuestion);
 
-            // Приховуємо або показуємо кнопки Prev і Next в залежності від поточного питання
+            
             prevButton.style.display = indexQuestion === 0 ? 'none' : 'block';
             nextButton.style.display = indexQuestion === questions.length - 1 ? 'none' : 'block';
         };
